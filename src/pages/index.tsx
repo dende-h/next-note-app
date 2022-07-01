@@ -1,56 +1,77 @@
-import {
-  Link as ChakraLink,
-  Text,
-  Code,
-  List,
-  ListIcon,
-  ListItem,
-} from '@chakra-ui/react'
-import { CheckCircleIcon, LinkIcon } from '@chakra-ui/icons'
+import { Box, Center, Flex, Spinner, Text } from "@chakra-ui/react";
+import { Head } from "../components/templates/Head";
+import { getSession, useUser, withPageAuthRequired } from "@auth0/nextjs-auth0";
+import { getSupabase } from "../utils/supabase";
+import { memoListState } from "../globalState/memo/memoListState";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import HeaderLayout from "../components/templates/HeaderLayout";
+import { MemoList } from "../components/organism/MemoList";
+import { Calendar } from "../components/organism/Calendar";
+import { useEffect, useState } from "react";
+import { userState } from "../globalState/user/userState";
+import { isShowTodo } from "../globalState/board/isShowTodo";
+import { TodoBoard } from "../components/organism/TodoBoard";
 
-import { Hero } from '../components/Hero'
-import { Container } from '../components/Container'
-import { Main } from '../components/Main'
-import { DarkModeSwitch } from '../components/DarkModeSwitch'
-import { CTA } from '../components/CTA'
-import { Footer } from '../components/Footer'
+const Index = ({ user, note }) => {
+	const [isFetched, setIsFetched] = useState(false);
+	const [isUserFetched, setUserFetched] = useState(false);
+	const setMemos = useSetRecoilState(memoListState);
+	const setUser = useSetRecoilState(userState);
+	const isShowTodoBoard = useRecoilValue(isShowTodo);
 
-const Index = () => (
-  <Container height="100vh">
-    <Hero />
-    <Main>
-      <Text>
-        Example repository of <Code>Next.js</Code> + <Code>chakra-ui</Code> +{' '}
-        <Code>TypeScript</Code>.
-      </Text>
+	useEffect(() => {
+		if (note) {
+			setMemos(note);
+			setIsFetched(true);
+		}
+	}, []);
 
-      <List spacing={3} my={0}>
-        <ListItem>
-          <ListIcon as={CheckCircleIcon} color="green.500" />
-          <ChakraLink
-            isExternal
-            href="https://chakra-ui.com"
-            flexGrow={1}
-            mr={2}
-          >
-            Chakra UI <LinkIcon />
-          </ChakraLink>
-        </ListItem>
-        <ListItem>
-          <ListIcon as={CheckCircleIcon} color="green.500" />
-          <ChakraLink isExternal href="https://nextjs.org" flexGrow={1} mr={2}>
-            Next.js <LinkIcon />
-          </ChakraLink>
-        </ListItem>
-      </List>
-    </Main>
+	useEffect(() => {
+		if (isFetched) {
+			setUser(user);
+			setUserFetched(true);
+		}
+	}, [isFetched]);
 
-    <DarkModeSwitch />
-    <Footer>
-      <Text>Next ❤️ Chakra</Text>
-    </Footer>
-    <CTA />
-  </Container>
-)
+	return (
+		<>
+			<HeaderLayout>
+				<Head>
+					<meta charSet="utf-8" />
+					<title>TopPage -Note me</title>
+				</Head>
+				{isUserFetched ? (
+					<Flex>
+						<MemoList />
+						{isShowTodoBoard ? <TodoBoard /> : <Calendar />}
+					</Flex>
+				) : (
+					<Center>
+						<Text p={100} fontSize={50}>
+							...Loading
+						</Text>
+						<Spinner />
+					</Center>
+				)}
+			</HeaderLayout>
+		</>
+	);
+};
 
-export default Index
+export const getServerSideProps = withPageAuthRequired({
+	async getServerSideProps({ req, res }) {
+		const {
+			user: { accessToken }
+		} = getSession(req, res);
+
+		const supabase = getSupabase(accessToken);
+
+		const { data: note } = await supabase.from("note").select("*").order("created_at", { ascending: true });
+
+		return {
+			props: { note }
+		};
+	}
+});
+
+export default Index;
