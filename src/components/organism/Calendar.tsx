@@ -21,7 +21,7 @@ export const Calendar: VFC = memo(() => {
 	useEffect(() => {
 		const events = schedule.map((item) => {
 			const eventDate = format(new Date(item.date), "yyyy-MM-dd");
-			const event = { title: item.title, date: eventDate};
+			const event = { title: item.title, description: item.description,date: eventDate};
 			return event;
 		}).concat(todo.map((item) => {
 			const eventDate = format(new Date(item.date), "yyyy-MM-dd");
@@ -50,7 +50,7 @@ export const Calendar: VFC = memo(() => {
 					}}
 					events={addEvent}
 					contentHeight={"700px"}
-					eventMouseEnter={(e)=>{console.log(e.event)}}
+					eventMouseEnter={(e)=>{console.log(e.event.extendProps)}}
 					eventMouseLeave={()=>{console.log("leave")}}
 
 				/>
