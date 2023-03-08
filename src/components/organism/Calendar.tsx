@@ -1,4 +1,4 @@
-import { Box } from "@chakra-ui/react";
+import { Box, Tooltip } from "@chakra-ui/react";
 // FullCalendarコンポーネント。
 import FullCalendar from "@fullcalendar/react";
 
@@ -16,41 +16,47 @@ import { categoryIsTodoSelector } from "../../globalState/category/categoryIsTod
 export const Calendar: VFC = memo(() => {
 	const [addEvent, setAddEvent] = useState([{}]);
 	const schedule = useRecoilValue(categoryIsScheduleSelector);
-	const todo = useRecoilValue(categoryIsTodoSelector)
+	const todo = useRecoilValue(categoryIsTodoSelector);
 
 	useEffect(() => {
-		const events = schedule.map((item) => {
-			const eventDate = format(new Date(item.date), "yyyy-MM-dd");
-			const event = { title: item.title, date: eventDate};
-			return event;
-		}).concat(todo.map((item) => {
-			const eventDate = format(new Date(item.date), "yyyy-MM-dd");
-			const event = { title: item.title, date: eventDate,backgroundColor: 'pink',
-				borderColor: 'pink' };
-			return event;}))
-		
+		const events = schedule
+			.map((item) => {
+				const eventDate = format(new Date(item.date), "yyyy-MM-dd");
+				const event = { title: item.title, date: eventDate };
+				return event;
+			})
+			.concat(
+				todo.map((item) => {
+					const eventDate = format(new Date(item.date), "yyyy-MM-dd");
+					const event = { title: item.title, date: eventDate, backgroundColor: "pink", borderColor: "pink" };
+					return event;
+				})
+			);
+
 		setAddEvent(events);
-	}, [schedule,todo]);
+	}, [schedule, todo]);
 
 	return (
 		<>
 			<Box backgroundColor={"gray.50"} w="100%" minHeight="850px" padding={6} borderRadius={10} shadow={"xl"} m={4}>
-				<FullCalendar
-					locale="ja"
-					plugins={[dayGridPlugin, interactionPlugin]}
-					initialView="dayGridMonth"
-					selectable={true}
-					weekends={true}
-					titleFormat={{
-						year: "numeric",
-						month: "short"
-					}}
-					headerToolbar={{
-						start: "title"
-					}}
-					events={addEvent}
-					contentHeight={"700px"}
-				/>
+				<Tooltip>
+					<FullCalendar
+						locale="ja"
+						plugins={[dayGridPlugin, interactionPlugin]}
+						initialView="dayGridMonth"
+						selectable={true}
+						weekends={true}
+						titleFormat={{
+							year: "numeric",
+							month: "short"
+						}}
+						headerToolbar={{
+							start: "title"
+						}}
+						events={addEvent}
+						contentHeight={"700px"}
+					/>
+				</Tooltip>
 			</Box>
 		</>
 	);
