@@ -1,4 +1,4 @@
-import { Box ,Tooltip} from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 // FullCalendarコンポーネント。
 import FullCalendar from "@fullcalendar/react";
 
@@ -13,17 +13,15 @@ import { categoryIsScheduleSelector } from "../../globalState/category/categoryI
 import format from "date-fns/format";
 import { categoryIsTodoSelector } from "../../globalState/category/categoryIsTodoSelector";
 
-
-
 export const Calendar: VFC = memo(() => {
 	const [addEvent, setAddEvent] = useState([{}]);
 	const schedule = useRecoilValue(categoryIsScheduleSelector);
 	const todo = useRecoilValue(categoryIsTodoSelector)
-	 
+
 	useEffect(() => {
 		const events = schedule.map((item) => {
 			const eventDate = format(new Date(item.date), "yyyy-MM-dd");
-			const event = { title: item.title, description: item.description,date: eventDate};
+			const event = { title: item.title, date: eventDate};
 			return event;
 		}).concat(todo.map((item) => {
 			const eventDate = format(new Date(item.date), "yyyy-MM-dd");
@@ -34,12 +32,9 @@ export const Calendar: VFC = memo(() => {
 		setAddEvent(events);
 	}, [schedule,todo]);
 
-	 
-
 	return (
 		<>
 			<Box backgroundColor={"gray.50"} w="100%" minHeight="850px" padding={6} borderRadius={10} shadow={"xl"} m={4}>
-				<Tooltip label="Hey, I'm here!" aria-label='A tooltip'>
 				<FullCalendar
 					locale="ja"
 					plugins={[dayGridPlugin, interactionPlugin]}
@@ -55,9 +50,7 @@ export const Calendar: VFC = memo(() => {
 					}}
 					events={addEvent}
 					contentHeight={"700px"}
-				
 				/>
-				</Tooltip>
 			</Box>
 		</>
 	);
