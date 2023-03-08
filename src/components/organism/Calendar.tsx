@@ -39,7 +39,7 @@ export const Calendar: VFC = memo(() => {
 	return (
 		<>
 			<Box backgroundColor={"gray.50"} w="100%" minHeight="850px" padding={6} borderRadius={10} shadow={"xl"} m={4}>
-				<Tooltip>
+				<Tooltip label="Hey, I'm here!" aria-label="A tooltip">
 					<FullCalendar
 						locale="ja"
 						plugins={[dayGridPlugin, interactionPlugin]}
