@@ -11,20 +11,26 @@ import { memo, useEffect, useState, VFC } from "react";
 import { useRecoilValue } from "recoil";
 import { categoryIsScheduleSelector } from "../../globalState/category/categoryIsScheduleSelector";
 import format from "date-fns/format";
+import { categoryIsTodoSelector } from "../../globalState/category/categoryIsTodoSelector";
 
 export const Calendar: VFC = memo(() => {
 	const [addEvent, setAddEvent] = useState([{}]);
 	const schedule = useRecoilValue(categoryIsScheduleSelector);
+	const todo = useRecoilValue(categoryIsTodoSelector)
 
 	useEffect(() => {
 		const events = schedule.map((item) => {
 			const eventDate = format(new Date(item.date), "yyyy-MM-dd");
-			const event = { title: item.title, date: eventDate };
+			const event = { title: item.title, date: eventDate};
 			return event;
-		});
+		}).concat(todo.map((item) => {
+			const eventDate = format(new Date(item.date), "yyyy-MM-dd");
+			const event = { title: item.title, date: eventDate,backgroundColor: 'pink',
+				borderColor: 'pink' };
+			return event;}))
 		
 		setAddEvent(events);
-	}, [schedule]);
+	}, [schedule,todo]);
 
 	return (
 		<>
