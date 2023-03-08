@@ -12,11 +12,13 @@ import { useRecoilValue } from "recoil";
 import { categoryIsScheduleSelector } from "../../globalState/category/categoryIsScheduleSelector";
 import format from "date-fns/format";
 import { categoryIsTodoSelector } from "../../globalState/category/categoryIsTodoSelector";
+import { FetchMemoList } from "../../types/fetchMemoList";
 
 export const Calendar: VFC = memo(() => {
 	const [addEvent, setAddEvent] = useState([{}]);
-	const schedule = useRecoilValue(categoryIsScheduleSelector);
-	const todo = useRecoilValue(categoryIsTodoSelector);
+	const schedule: FetchMemoList[] = useRecoilValue(categoryIsScheduleSelector);
+	const todo: FetchMemoList[] = useRecoilValue(categoryIsTodoSelector);
+	const completed = 2;
 
 	useEffect(() => {
 		const events = schedule
@@ -28,7 +30,8 @@ export const Calendar: VFC = memo(() => {
 			.concat(
 				todo.map((item) => {
 					const eventDate = format(new Date(item.date), "yyyy-MM-dd");
-					const event = { title: item.title, date: eventDate, backgroundColor: "pink", borderColor: "pink" };
+					const todoColor = item.mark_div === completed ? "gray" : "pink";
+					const event = { title: item.title, date: eventDate, backgroundColor: todoColor, borderColor: "pink" };
 					return event;
 				})
 			);
