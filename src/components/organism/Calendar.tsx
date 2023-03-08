@@ -13,12 +13,13 @@ import { categoryIsScheduleSelector } from "../../globalState/category/categoryI
 import format from "date-fns/format";
 import { categoryIsTodoSelector } from "../../globalState/category/categoryIsTodoSelector";
 import ReactDOM from "react-dom";
+import { useRef } from "react";
 
 export const Calendar: VFC = memo(() => {
 	const [addEvent, setAddEvent] = useState([{}]);
 	const schedule = useRecoilValue(categoryIsScheduleSelector);
 	const todo = useRecoilValue(categoryIsTodoSelector)
-	let tooltipInstance = null;
+	 const tooltipRef = useRef(null);
 
 	useEffect(() => {
 		const events = schedule.map((item) => {
@@ -36,7 +37,7 @@ export const Calendar: VFC = memo(() => {
 
 	const handleMouseEnter = (info) => {
 	 if (info.event.extendedProps.description) {
-      tooltipInstance = (
+      const tooltipContent = (
         <Tooltip
           label={info.event.extendedProps.description}
           isOpen={true}
@@ -45,12 +46,12 @@ export const Calendar: VFC = memo(() => {
           {info.el}
         </Tooltip>
       );
-      ReactDOM.render(tooltipInstance, document.getElementById("tooltip-root"));
+      ReactDOM.render(tooltipContent, tooltipRef.current);
     }
   };
 
-  const handleMouseLeave = (info) => {
-    ReactDOM.unmountComponentAtNode(document.getElementById("tooltip-root"));
+  const handleMouseLeave = () => {
+    ReactDOM.unmountComponentAtNode(document.getElementById(tooltipRef.current));
   };
 
 	return (
