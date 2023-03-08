@@ -35,12 +35,12 @@ export const ModalInput: VFC = memo(() => {
 	const [date, setDate] = useRecoilState(dateState);
 	const [isDisabledSaveButton, setIsDisabledSaveButton] = useState(true);
 	const { inputMemoList, loading } = useMemoApi();
- console.log("ここが動く？")
+
  	
 	const setNewDate = () => {
 		setDate(format(new Date(), "yyyy/MM/dd"));
 	};
-	setNewDate();
+	
 
 	useEffect(() => {
 		title === "" || description === "" ? setIsDisabledSaveButton(true) : setIsDisabledSaveButton(false);

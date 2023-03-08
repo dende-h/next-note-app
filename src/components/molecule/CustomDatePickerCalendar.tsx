@@ -25,7 +25,7 @@ export const CustomDatePickerCalendar: VFC<Props> = memo((props: Props) => {
 	const getInputDate = (event: Date) => {
 		setStartDate(event);
 		const date = format(event, "yyyy/MM/dd");
-		console.log(date)
+		
 		dateValueSet(date);
 	};
 	const years = _.range(2020, getYear(new Date()) + 1, 1);
