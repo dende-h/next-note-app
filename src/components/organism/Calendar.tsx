@@ -17,6 +17,7 @@ export const Calendar: VFC = memo(() => {
 	const [addEvent, setAddEvent] = useState([{}]);
 	const schedule = useRecoilValue(categoryIsScheduleSelector);
 	const todo = useRecoilValue(categoryIsTodoSelector)
+	const [hoveredEvent, setHoveredEvent] = useState(null);
 
 	useEffect(() => {
 		const events = schedule.map((item) => {
@@ -50,10 +51,31 @@ export const Calendar: VFC = memo(() => {
 					}}
 					events={addEvent}
 					contentHeight={"700px"}
-					eventMouseEnter={(e)=>{console.log(e.event.extendedProps)}}
-					eventMouseLeave={()=>{console.log("leave")}}
+					 eventRender={(info) => {
+        const { event } = info;
 
-				/>
+        const handleMouseEnter = () => {
+          setHoveredEvent(event);
+        };
+
+        const handleMouseLeave = () => {
+          setHoveredEvent(null);
+        };
+
+        return (
+          <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+            {event.title}
+          </div>
+        );
+      }}
+    >
+      {hoveredEvent && (
+        <Tooltip label={hoveredEvent.title}>
+          <div>{hoveredEvent.title}</div>
+        </Tooltip>
+      )}
+
+				</FullCalendar>
 			</Box>
 		</>
 	);
