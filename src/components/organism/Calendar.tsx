@@ -12,6 +12,7 @@ import { useRecoilValue } from "recoil";
 import { categoryIsScheduleSelector } from "../../globalState/category/categoryIsScheduleSelector";
 import format from "date-fns/format";
 import { categoryIsTodoSelector } from "../../globalState/category/categoryIsTodoSelector";
+import ReactDOM from "react-dom";
 
 export const Calendar: VFC = memo(() => {
 	const [addEvent, setAddEvent] = useState([{}]);
@@ -34,25 +35,22 @@ export const Calendar: VFC = memo(() => {
 	}, [schedule,todo]);
 
 	const handleMouseEnter = (info) => {
-    if (info.event.extendedProps.description) {
-      tooltipInstance = Tooltip.show({
-        label: info.event.extendedProps.description,
-        placement: "top",
-        hasArrow: true,
-        bg: "gray.500",
-        color: "white",
-        p: 2,
-        borderRadius: "md",
-        transition: "scale 0.2s"
-      }, info.el);
+	 if (info.event.extendedProps.description) {
+      tooltipInstance = (
+        <Tooltip
+          label={info.event.extendedProps.description}
+          isOpen={true}
+          placement="top"
+        >
+          {info.el}
+        </Tooltip>
+      );
+      ReactDOM.render(tooltipInstance, document.getElementById("tooltip-root"));
     }
   };
 
   const handleMouseLeave = (info) => {
-    if (tooltipInstance) {
-      tooltipInstance.hide();
-      tooltipInstance = null;
-    }
+    ReactDOM.unmountComponentAtNode(document.getElementById("tooltip-root"));
   };
 
 	return (
