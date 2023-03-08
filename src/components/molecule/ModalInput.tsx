@@ -57,7 +57,6 @@ export const ModalInput: VFC = memo(() => {
 
 	const onClickSaveButton = () => {
 		const body = { title, description, category, date, mark_div: 0 };
-		console.log(body)
 		inputMemoList(body).then(() => onClose());
 	};
 
