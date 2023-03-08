@@ -7,7 +7,7 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 
 // FullCalendarで日付や時間が選択できるようになるモジュール。
 import interactionPlugin from "@fullcalendar/interaction";
-import { memo, useEffect, useState, VFC ,useRef} from "react";
+import { memo, useEffect, useState, VFC } from "react";
 import { useRecoilValue } from "recoil";
 import { categoryIsScheduleSelector } from "../../globalState/category/categoryIsScheduleSelector";
 import format from "date-fns/format";
