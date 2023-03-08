@@ -1,4 +1,4 @@
-import { Box } from "@chakra-ui/react";
+import { Box ,Tooltip} from "@chakra-ui/react";
 // FullCalendarコンポーネント。
 import FullCalendar from "@fullcalendar/react";
 
@@ -17,7 +17,7 @@ export const Calendar: VFC = memo(() => {
 	const [addEvent, setAddEvent] = useState([{}]);
 	const schedule = useRecoilValue(categoryIsScheduleSelector);
 	const todo = useRecoilValue(categoryIsTodoSelector)
-	const [hoveredEvent, setHoveredEvent] = useState(null);
+	let tooltipInstance = null;
 
 	useEffect(() => {
 		const events = schedule.map((item) => {
@@ -32,6 +32,28 @@ export const Calendar: VFC = memo(() => {
 		
 		setAddEvent(events);
 	}, [schedule,todo]);
+
+	const handleMouseEnter = (info) => {
+    if (info.event.extendedProps.description) {
+      tooltipInstance = Tooltip.show({
+        label: info.event.extendedProps.description,
+        placement: "top",
+        hasArrow: true,
+        bg: "gray.500",
+        color: "white",
+        p: 2,
+        borderRadius: "md",
+        transition: "scale 0.2s"
+      }, info.el);
+    }
+  };
+
+  const handleMouseLeave = (info) => {
+    if (tooltipInstance) {
+      tooltipInstance.hide();
+      tooltipInstance = null;
+    }
+  };
 
 	return (
 		<>
@@ -51,31 +73,11 @@ export const Calendar: VFC = memo(() => {
 					}}
 					events={addEvent}
 					contentHeight={"700px"}
-					 eventRender={(info) => {
-        const { event } = info;
+					 eventMouseEnter={handleMouseEnter}
+      eventMouseLeave={handleMouseLeave}
+					
 
-        const handleMouseEnter = () => {
-          setHoveredEvent(event);
-        };
-
-        const handleMouseLeave = () => {
-          setHoveredEvent(null);
-        };
-
-        return (
-          <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-            {event.title}
-          </div>
-        );
-      }}
-    >
-      {hoveredEvent && (
-        <Tooltip label={hoveredEvent.title}>
-          <div>{hoveredEvent.title}</div>
-        </Tooltip>
-      )}
-
-				</FullCalendar>
+				/>
 			</Box>
 		</>
 	);
