@@ -22,8 +22,8 @@ export const Calendar: VFC = memo(() => {
 			const event = { title: item.title, date: eventDate };
 			return event;
 		});
-		console.log(events)
-		setAddEvent("ここかな？");
+		console.log("ここかな？")
+		setAddEvent(events);
 	}, [schedule]);
 
 	return (
