@@ -23,7 +23,7 @@ export const Calendar: VFC = memo(() => {
 			return event;
 		});
 		console.log(events)
-		setAddEvent(events);
+		setAddEvent("ここかな？");
 	}, [schedule]);
 
 	return (
