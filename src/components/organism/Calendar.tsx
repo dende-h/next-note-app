@@ -1,4 +1,4 @@
-import { Box, Tooltip } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 // FullCalendarコンポーネント。
 import FullCalendar from "@fullcalendar/react";
 
@@ -39,24 +39,22 @@ export const Calendar: VFC = memo(() => {
 	return (
 		<>
 			<Box backgroundColor={"gray.50"} w="100%" minHeight="850px" padding={6} borderRadius={10} shadow={"xl"} m={4}>
-				<Tooltip label="Hey, I'm here!" aria-label="A tooltip">
-					<FullCalendar
-						locale="ja"
-						plugins={[dayGridPlugin, interactionPlugin]}
-						initialView="dayGridMonth"
-						selectable={true}
-						weekends={true}
-						titleFormat={{
-							year: "numeric",
-							month: "short"
-						}}
-						headerToolbar={{
-							start: "title"
-						}}
-						events={addEvent}
-						contentHeight={"700px"}
-					/>
-				</Tooltip>
+				<FullCalendar
+					locale="ja"
+					plugins={[dayGridPlugin, interactionPlugin]}
+					initialView="dayGridMonth"
+					selectable={true}
+					weekends={true}
+					titleFormat={{
+						year: "numeric",
+						month: "short"
+					}}
+					headerToolbar={{
+						start: "title"
+					}}
+					events={addEvent}
+					contentHeight={"700px"}
+				/>
 			</Box>
 		</>
 	);
