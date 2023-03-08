@@ -50,7 +50,7 @@ export const Calendar: VFC = memo(() => {
 					}}
 					events={addEvent}
 					contentHeight={"700px"}
-					eventMouseEnter={(e)=>{console.log(e)}}
+					eventMouseEnter={(e)=>{console.log(e.event)}}
 					eventMouseLeave={()=>{console.log("leave")}}
 
 				/>
