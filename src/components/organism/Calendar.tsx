@@ -12,16 +12,14 @@ import { useRecoilValue } from "recoil";
 import { categoryIsScheduleSelector } from "../../globalState/category/categoryIsScheduleSelector";
 import format from "date-fns/format";
 import { categoryIsTodoSelector } from "../../globalState/category/categoryIsTodoSelector";
-import { createPortal } from "react-dom";
+
 
 
 export const Calendar: VFC = memo(() => {
 	const [addEvent, setAddEvent] = useState([{}]);
 	const schedule = useRecoilValue(categoryIsScheduleSelector);
 	const todo = useRecoilValue(categoryIsTodoSelector)
-	  const [tooltipContent, setTooltipContent] = useState(null);
-  const tooltipRef = useRef(null);
-
+	 
 	useEffect(() => {
 		const events = schedule.map((item) => {
 			const eventDate = format(new Date(item.date), "yyyy-MM-dd");
@@ -36,28 +34,12 @@ export const Calendar: VFC = memo(() => {
 		setAddEvent(events);
 	}, [schedule,todo]);
 
-	 const handleMouseEnter = (info) => {
-    if (info.event.extendedProps.description) {
-      const tooltipContent = (
-        <Tooltip
-          label={info.event.extendedProps.description}
-          isOpen={true}
-          placement="top"
-        >
-          {info.el}
-        </Tooltip>
-      );
-      setTooltipContent(tooltipContent);
-    }
-  };
-
-  const handleMouseLeave = () => {
-    setTooltipContent(null);
-  };
+	 
 
 	return (
 		<>
 			<Box backgroundColor={"gray.50"} w="100%" minHeight="850px" padding={6} borderRadius={10} shadow={"xl"} m={4}>
+				<Tooltip label="Hey, I'm here!" aria-label='A tooltip'>
 				<FullCalendar
 					locale="ja"
 					plugins={[dayGridPlugin, interactionPlugin]}
@@ -73,12 +55,9 @@ export const Calendar: VFC = memo(() => {
 					}}
 					events={addEvent}
 					contentHeight={"700px"}
-					 eventMouseEnter={handleMouseEnter}
-      eventMouseLeave={handleMouseLeave}
+				
 				/>
-				 {tooltipContent &&
-        createPortal(tooltipContent, tooltipRef.current ?? document.body)}
-      <div ref={tooltipRef} />
+				</Tooltip>
 			</Box>
 		</>
 	);
