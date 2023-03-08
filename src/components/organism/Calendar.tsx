@@ -7,19 +7,20 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 
 // FullCalendarで日付や時間が選択できるようになるモジュール。
 import interactionPlugin from "@fullcalendar/interaction";
-import { memo, useEffect, useState, VFC } from "react";
+import { memo, useEffect, useState, VFC ,useRef} from "react";
 import { useRecoilValue } from "recoil";
 import { categoryIsScheduleSelector } from "../../globalState/category/categoryIsScheduleSelector";
 import format from "date-fns/format";
 import { categoryIsTodoSelector } from "../../globalState/category/categoryIsTodoSelector";
-import ReactDOM from "react-dom";
-import { useRef } from "react";
+import { createPortal } from "react-dom";
+
 
 export const Calendar: VFC = memo(() => {
 	const [addEvent, setAddEvent] = useState([{}]);
 	const schedule = useRecoilValue(categoryIsScheduleSelector);
 	const todo = useRecoilValue(categoryIsTodoSelector)
-	 const tooltipRef = useRef(null);
+	  const [tooltipContent, setTooltipContent] = useState(null);
+  const tooltipRef = useRef(null);
 
 	useEffect(() => {
 		const events = schedule.map((item) => {
@@ -35,8 +36,8 @@ export const Calendar: VFC = memo(() => {
 		setAddEvent(events);
 	}, [schedule,todo]);
 
-	const handleMouseEnter = (info) => {
-	 if (info.event.extendedProps.description) {
+	 const handleMouseEnter = (info) => {
+    if (info.event.extendedProps.description) {
       const tooltipContent = (
         <Tooltip
           label={info.event.extendedProps.description}
@@ -46,12 +47,12 @@ export const Calendar: VFC = memo(() => {
           {info.el}
         </Tooltip>
       );
-      ReactDOM.render(tooltipContent, tooltipRef.current);
+      setTooltipContent(tooltipContent);
     }
   };
 
   const handleMouseLeave = () => {
-    ReactDOM.unmountComponentAtNode(document.getElementById(tooltipRef.current));
+    setTooltipContent(null);
   };
 
 	return (
@@ -74,9 +75,10 @@ export const Calendar: VFC = memo(() => {
 					contentHeight={"700px"}
 					 eventMouseEnter={handleMouseEnter}
       eventMouseLeave={handleMouseLeave}
-					
-
 				/>
+				 {tooltipContent &&
+        createPortal(tooltipContent, tooltipRef.current ?? document.body)}
+      <div ref={tooltipRef} />
 			</Box>
 		</>
 	);
