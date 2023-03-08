@@ -35,6 +35,8 @@ export const ModalInput: VFC = memo(() => {
 	const [date, setDate] = useRecoilState(dateState);
 	const [isDisabledSaveButton, setIsDisabledSaveButton] = useState(true);
 	const { inputMemoList, loading } = useMemoApi();
+ console.log(date)
+ 	
 	const setNewDate = () => {
 		setDate(format(new Date(), "yyyy/MM/dd"));
 	};
@@ -55,6 +57,7 @@ export const ModalInput: VFC = memo(() => {
 
 	const onClickSaveButton = () => {
 		const body = { title, description, category, date, mark_div: 0 };
+		console.log(body)
 		inputMemoList(body).then(() => onClose());
 	};
 
