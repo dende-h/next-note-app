@@ -1,4 +1,4 @@
-import { border, Box, Tooltip } from "@chakra-ui/react";
+import { Box, Tooltip } from "@chakra-ui/react";
 // FullCalendarコンポーネント。
 import FullCalendar, { EventContentArg } from "@fullcalendar/react";
 
@@ -7,6 +7,9 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 
 // FullCalendarで日付や時間が選択できるようになるモジュール。
 import interactionPlugin from "@fullcalendar/interaction";
+//日本語対応のためのインポート
+import jaLocale from "@fullcalendar/core/locales/ja";
+
 import { memo, useEffect, useState, VFC } from "react";
 import { useRecoilValue } from "recoil";
 import { categoryIsScheduleSelector } from "../../globalState/category/categoryIsScheduleSelector";
@@ -71,25 +74,44 @@ export const Calendar: VFC = memo(() => {
 		setAddEvent(events);
 	}, [schedule, todo]);
 
+	const eventExample = [
+		{
+			title: "イベント1",
+			start: new Date(),
+			end: new Date().setDate(new Date().getDate() + 5),
+			description: "温泉旅行",
+			backgroundColor: "green",
+			borderColor: "green"
+		},
+		{
+			title: "期末テスト",
+			start: new Date().setDate(new Date().getDate() + 5),
+			description: "2年最後の期末テスト",
+			backgroundColor: "blue",
+			borderColor: "blue"
+		}
+	];
+
 	return (
 		<>
 			<Box backgroundColor={"gray.50"} w="100%" minHeight="850px" padding={6} borderRadius={10} shadow={"xl"} m={4}>
 				<FullCalendar
-					locale="ja"
-					plugins={[dayGridPlugin, interactionPlugin]}
+					// locales={[jaLocale]}
+					// locale="ja"
+					plugins={[dayGridPlugin /*interactionPlugin*/]}
 					initialView="dayGridMonth"
-					selectable={true}
-					weekends={true}
-					titleFormat={{
-						year: "numeric",
-						month: "short"
-					}}
-					headerToolbar={{
-						start: "title"
-					}}
-					events={addEvent}
-					contentHeight={"700px"}
-					eventContent={(arg: EventContentArg) => EventComponent(arg)}
+					events={eventExample}
+
+					// weekends={true} //falseにすると土日が含まれなくなる
+					// titleFormat={{
+					// 	year: "numeric",
+					// 	month: "short"
+					// }}
+					// headerToolbar={{
+					// 	start: "title"
+					// }}
+					// contentHeight={"700px"}
+					// eventContent={(arg: EventContentArg) => EventComponent(arg)}
 				/>
 			</Box>
 		</>
