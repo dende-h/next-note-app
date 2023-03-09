@@ -21,9 +21,9 @@ export const Calendar: VFC = memo(() => {
 	const completed = 2;
 
 	//tooltipを追加するためにコンポーネントを生成している
-	const EventComponent = (title: string, description: string) => (
-		<Tooltip label={description} aria-label="tooltip" placement="top" hasArrow arrowSize={5}>
-			<div>{title}</div>
+	const EventComponent = (arg: EventContentArg) => (
+		<Tooltip label={arg.event.extendedProps.description} aria-label="tooltip" placement="top" hasArrow arrowSize={5}>
+			<div>{arg.event.title}</div>
 		</Tooltip>
 	);
 
@@ -38,7 +38,7 @@ export const Calendar: VFC = memo(() => {
 					item.endDate !== eventDate
 						? format(beforeEndDate.setDate(beforeEndDate.getDate() + 1), "yyyy-MM-dd")
 						: eventDate;
-				const event = { title: item.title, start: eventDate, end: endDate };
+				const event = { title: item.title, start: eventDate, end: endDate, description: item.description };
 				return event;
 			})
 			.concat(
@@ -54,6 +54,7 @@ export const Calendar: VFC = memo(() => {
 						title: item.title,
 						start: eventDate,
 						end: endDate,
+						description: item.description,
 						backgroundColor: todoColor,
 						borderColor: todoColor
 					};
@@ -82,7 +83,7 @@ export const Calendar: VFC = memo(() => {
 					}}
 					events={addEvent}
 					contentHeight={"700px"}
-					eventContent={(arg: EventContentArg) => EventComponent(arg.event.title, arg.event.extendedProps.description)}
+					eventContent={(arg: EventContentArg) => EventComponent(arg)}
 				/>
 			</Box>
 		</>
