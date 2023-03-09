@@ -108,7 +108,7 @@ export const Calendar: VFC = memo(() => {
 						end: "today prev,next"
 					}}
 					contentHeight={"700px"}
-					// eventContent={(arg: EventContentArg) => EventComponent(arg)}
+					eventContent={(arg: EventContentArg) => EventComponent(arg)}
 				/>
 			</Box>
 		</>
