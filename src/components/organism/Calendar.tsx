@@ -101,16 +101,15 @@ export const Calendar: VFC = memo(() => {
 					plugins={[dayGridPlugin /*interactionPlugin*/]}
 					initialView="dayGridMonth"
 					events={eventExample}
-
-					// weekends={true} //falseにすると土日が含まれなくなる
-					// titleFormat={{
-					// 	year: "numeric",
-					// 	month: "short"
-					// }}
-					// headerToolbar={{
-					// 	start: "title"
-					// }}
-					// contentHeight={"700px"}
+					weekends={true} //falseにすると土日が含まれなくなるdefault値がtrueなので省略可
+					titleFormat={{
+						year: "numeric",
+						month: "short"
+					}}
+					headerToolbar={{
+						start: "title"
+					}}
+					contentHeight={"700px"}
 					// eventContent={(arg: EventContentArg) => EventComponent(arg)}
 				/>
 			</Box>
