@@ -13,7 +13,9 @@ import {
 	Textarea,
 	useDisclosure,
 	Stack,
-	IconButton
+	IconButton,
+	HStack,
+	Box
 } from "@chakra-ui/react";
 import { memo, useEffect, useState, VFC } from "react";
 import { useRecoilState } from "recoil";
@@ -28,6 +30,7 @@ import format from "date-fns/format";
 import { AddIcon } from "@chakra-ui/icons";
 import { endDateState } from "../../globalState/date/endDateState";
 import { BodyType } from "../../types/bodyType";
+import { CustomEndDatePickerCalendar } from "./CustomEndDatePickerCalendar";
 
 export const ModalInput: VFC = memo(() => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
@@ -80,9 +83,16 @@ export const ModalInput: VFC = memo(() => {
 									Title
 								</FormLabel>
 								<Input placeholder="Title" onChange={onChangeTitle} />
-								<FormLabel fontSize={"xl"}>Date</FormLabel>
-								<CustomDatePickerCalendar defaultValue={date} />
-								<CustomDatePickerCalendar defaultValue={endDate} />
+								<HStack>
+									<Box>
+										<FormLabel fontSize={"xl"}>StartDate</FormLabel>
+										<CustomDatePickerCalendar defaultValue={date} />
+									</Box>
+									<Box>
+										<FormLabel fontSize={"xl"}>EndDate</FormLabel>
+										<CustomEndDatePickerCalendar defaultValue={endDate} />
+									</Box>
+								</HStack>
 								<FormLabel fontSize={"xl"}>Category</FormLabel>
 								<RadioCategory value={"メモ"} />
 								<FormLabel fontSize={"xl"}>Description</FormLabel>
