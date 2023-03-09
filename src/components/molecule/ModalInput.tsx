@@ -26,6 +26,8 @@ import { CustomDatePickerCalendar } from "./CustomDatePickerCalendar";
 import { RadioCategory } from "./RadioCategory";
 import format from "date-fns/format";
 import { AddIcon } from "@chakra-ui/icons";
+import { endDateState } from "../../globalState/date/endDateState";
+import { BodyType } from "../../types/bodyType";
 
 export const ModalInput: VFC = memo(() => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
@@ -33,14 +35,14 @@ export const ModalInput: VFC = memo(() => {
 	const { value: description, setValue: setDescription, onChangeTextArea: onChangeDescription } = useTextArea();
 	const [category, setCategory] = useRecoilState(categoryState);
 	const [date, setDate] = useRecoilState(dateState);
+	const [endDate, setEndDate] = useRecoilState(endDateState);
 	const [isDisabledSaveButton, setIsDisabledSaveButton] = useState(true);
 	const { inputMemoList, loading } = useMemoApi();
 
- 	
 	const setNewDate = () => {
 		setDate(format(new Date(), "yyyy/MM/dd"));
+		setEndDate(format(new Date(), "yyyy/MM/dd"));
 	};
-	
 
 	useEffect(() => {
 		title === "" || description === "" ? setIsDisabledSaveButton(true) : setIsDisabledSaveButton(false);
@@ -56,7 +58,7 @@ export const ModalInput: VFC = memo(() => {
 	}, [isOpen]);
 
 	const onClickSaveButton = () => {
-		const body = { title, description, category, date, mark_div: 0 };
+		const body: BodyType = { title, description, category, date, endDate, mark_div: 0 };
 		inputMemoList(body).then(() => onClose());
 	};
 
@@ -80,6 +82,7 @@ export const ModalInput: VFC = memo(() => {
 								<Input placeholder="Title" onChange={onChangeTitle} />
 								<FormLabel fontSize={"xl"}>Date</FormLabel>
 								<CustomDatePickerCalendar defaultValue={date} />
+								<CustomDatePickerCalendar defaultValue={endDate} />
 								<FormLabel fontSize={"xl"}>Category</FormLabel>
 								<RadioCategory value={"メモ"} />
 								<FormLabel fontSize={"xl"}>Description</FormLabel>

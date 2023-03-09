@@ -1,4 +1,4 @@
-import { Box, Tooltip } from "@chakra-ui/react";
+import { border, Box, Tooltip } from "@chakra-ui/react";
 // FullCalendarコンポーネント。
 import FullCalendar, { EventContentArg } from "@fullcalendar/react";
 
@@ -40,7 +40,8 @@ export const Calendar: VFC = memo(() => {
 						title: item.title,
 						start: format(new Date(), "yyyy-MM-dd"),
 						end: eventDate,
-						backgroundColor: todoColor
+						backgroundColor: todoColor,
+						borderColor: todoColor
 					};
 					return event;
 				})

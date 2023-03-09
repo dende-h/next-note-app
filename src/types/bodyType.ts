@@ -4,5 +4,6 @@ export type BodyType = {
 	category: string;
 	description: string;
 	date: string;
+	endDate?: string;
 	mark_div: number;
 };
