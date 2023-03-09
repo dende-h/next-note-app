@@ -103,8 +103,8 @@ export const Calendar: VFC = memo(() => {
 					events={eventExample}
 					weekends={true} //falseにすると土日が含まれなくなるdefault値がtrueなので省略可
 					headerToolbar={{
-						start: "title Calendar",
-						center: "prevYear     nextYear",
+						start: "prevYear,nextYear",
+						center: "title",
 						end: "today prev,next"
 					}}
 					contentHeight={"700px"}
