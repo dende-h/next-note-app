@@ -1,6 +1,6 @@
 import { Box } from "@chakra-ui/react";
 // FullCalendarコンポーネント。
-import FullCalendar from "@fullcalendar/react";
+import FullCalendar, { EventContentArg } from "@fullcalendar/react";
 
 // FullCalendarで月表示を可能にするモジュール。
 import dayGridPlugin from "@fullcalendar/daygrid";
@@ -19,6 +19,7 @@ export const Calendar: VFC = memo(() => {
 	const schedule: FetchMemoList[] = useRecoilValue(categoryIsScheduleSelector);
 	const todo: FetchMemoList[] = useRecoilValue(categoryIsTodoSelector);
 	const completed = 2;
+	const EventComponent = (title: string) => <div>{title}</div>;
 
 	useEffect(() => {
 		const events = schedule
@@ -31,7 +32,12 @@ export const Calendar: VFC = memo(() => {
 				todo.map((item) => {
 					const eventDate = format(new Date(item.date), "yyyy-MM-dd");
 					const todoColor = item.mark_div === completed ? "gray" : "pink";
-					const event = { title: item.title, date: eventDate, backgroundColor: todoColor, borderColor: "pink" };
+					const event = {
+						title: item.title,
+						start: new Date(),
+						date: eventDate,
+						backgroundColor: todoColor
+					};
 					return event;
 				})
 			);
@@ -57,6 +63,7 @@ export const Calendar: VFC = memo(() => {
 					}}
 					events={addEvent}
 					contentHeight={"700px"}
+					eventContent={(arg: EventContentArg) => EventComponent(arg.event.title)}
 				/>
 			</Box>
 		</>
