@@ -29,17 +29,19 @@ export const Calendar: VFC = memo(() => {
 		const events = schedule
 			.map((item) => {
 				const eventDate = format(new Date(item.date), "yyyy-MM-dd");
-				const event = { title: item.title, start: eventDate };
+				const endDate = item.endDate !== eventDate ? format(new Date(item.endDate), "yyyy-MM-dd") : eventDate;
+				const event = { title: item.title, start: eventDate, end: endDate };
 				return event;
 			})
 			.concat(
 				todo.map((item) => {
 					const eventDate = format(new Date(item.date), "yyyy-MM-dd");
+					const endDate = format(new Date(item.endDate), "yyyy-MM-dd");
 					const todoColor = item.mark_div === completed ? "gray" : "pink";
 					const event = {
 						title: item.title,
-						start: format(new Date(), "yyyy-MM-dd"),
-						end: eventDate,
+						start: eventDate,
+						end: endDate,
 						backgroundColor: todoColor,
 						borderColor: todoColor
 					};

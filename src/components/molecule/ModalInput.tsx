@@ -83,16 +83,24 @@ export const ModalInput: VFC = memo(() => {
 									Title
 								</FormLabel>
 								<Input placeholder="Title" onChange={onChangeTitle} />
-								<HStack>
+								{category === "メモ" ? (
 									<Box>
-										<FormLabel fontSize={"xl"}>StartDate</FormLabel>
+										<FormLabel fontSize={"xl"}>Date</FormLabel>
 										<CustomDatePickerCalendar defaultValue={date} />
 									</Box>
-									<Box>
-										<FormLabel fontSize={"xl"}>EndDate</FormLabel>
-										<CustomEndDatePickerCalendar defaultValue={endDate} />
-									</Box>
-								</HStack>
+								) : (
+									<HStack>
+										<Box>
+											<FormLabel fontSize={"xl"}>StartDate</FormLabel>
+											<CustomDatePickerCalendar defaultValue={date} />
+										</Box>
+										<Box>
+											<FormLabel fontSize={"xl"}>EndDate</FormLabel>
+											<CustomEndDatePickerCalendar defaultValue={endDate} />
+										</Box>
+									</HStack>
+								)}
+
 								<FormLabel fontSize={"xl"}>Category</FormLabel>
 								<RadioCategory value={"メモ"} />
 								<FormLabel fontSize={"xl"}>Description</FormLabel>

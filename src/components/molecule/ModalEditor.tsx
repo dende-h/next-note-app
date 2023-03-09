@@ -13,7 +13,9 @@ import {
 	useDisclosure,
 	Divider,
 	Stack,
-	IconButton
+	IconButton,
+	HStack,
+	Box
 } from "@chakra-ui/react";
 import { memo, useEffect, useState, VFC } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
@@ -28,6 +30,8 @@ import { CustomDatePickerCalendar } from "./CustomDatePickerCalendar";
 import { RadioCategory } from "./RadioCategory";
 import { EditIcon } from "@chakra-ui/icons";
 import { userState } from "../../globalState/user/userState";
+import { CustomEndDatePickerCalendar } from "./CustomEndDatePickerCalendar";
+import { endDateState } from "../../globalState/date/endDateState";
 
 type Props = {
 	editMemo: FetchMemoList;
@@ -36,12 +40,13 @@ type Props = {
 type body = BodyType;
 export const ModalEditor: VFC<Props> = memo((props: Props) => {
 	const { editMemo } = props;
-	const { title, description, category, date } = editMemo;
+	const { title, description, category, date, endDate } = editMemo;
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const { value: newTitle, setValue: setNewTitle, onChangeInputForm: onChangeTitle } = useInputForm();
 	const { value: newDescription, setValue: setNewDescription, onChangeTextArea: onChangeDescription } = useTextArea();
 	const [newCategory, setNewCategory] = useRecoilState(categoryState);
 	const [newDate, setNewDate] = useRecoilState(dateState);
+	const [newEndDate, setNewEndDate] = useRecoilState(endDateState);
 	const [isDisabledSaveButton, setIsDisabledSaveButton] = useState(true);
 	const { editMemoList, loading } = useMemoApi();
 
@@ -49,12 +54,13 @@ export const ModalEditor: VFC<Props> = memo((props: Props) => {
 		(newTitle === `${title}` &&
 			newDescription === `${description}` &&
 			newCategory === `${category}` &&
-			newDate === `${date}`) ||
+			newDate === `${date}` &&
+			newEndDate === `${endDate}`) ||
 		newTitle === "" ||
 		newDescription === ""
 			? setIsDisabledSaveButton(true)
 			: setIsDisabledSaveButton(false);
-	}, [newTitle, newDescription, newCategory, newDate]);
+	}, [newTitle, newDescription, newCategory, newDate, newEndDate]);
 
 	useEffect(() => {
 		if (isOpen) {
@@ -62,11 +68,13 @@ export const ModalEditor: VFC<Props> = memo((props: Props) => {
 			setNewDescription(description);
 			setNewCategory(category);
 			setNewDate(date);
+			setNewEndDate(endDate);
 		} else {
 			setNewTitle("");
 			setNewDescription("");
 			setNewCategory(category);
 			setNewDate(date);
+			setNewEndDate(date);
 		}
 	}, [isOpen]);
 
@@ -76,7 +84,8 @@ export const ModalEditor: VFC<Props> = memo((props: Props) => {
 			title: newTitle,
 			description: newDescription,
 			category: newCategory,
-			date: newDate
+			date: newDate,
+			endDate: newEndDate
 		};
 		delete body.id;
 		editMemoList(editMemo.id, body).then(() => onClose());
@@ -107,8 +116,33 @@ export const ModalEditor: VFC<Props> = memo((props: Props) => {
 									Title
 								</FormLabel>
 								<Input defaultValue={title} onChange={onChangeTitle} />
-								<FormLabel fontSize={"xl"}>Date</FormLabel>
-								<CustomDatePickerCalendar defaultValue={date} />
+								{newCategory === "メモ" ? (
+									<Box>
+										<FormLabel fontSize={"xl"}>Date</FormLabel>
+										<CustomDatePickerCalendar defaultValue={newDate} />
+									</Box>
+								) : (
+									<HStack>
+										<Box>
+											<FormLabel fontSize={"xl"}>StartDate</FormLabel>
+											<CustomDatePickerCalendar defaultValue={newDate} />
+										</Box>
+										<Box>
+											<FormLabel fontSize={"xl"}>EndDate</FormLabel>
+											<CustomEndDatePickerCalendar defaultValue={newEndDate} />
+										</Box>
+									</HStack>
+								)}
+								<HStack>
+									<Box>
+										<FormLabel fontSize={"xl"}>StartDate</FormLabel>
+										<CustomDatePickerCalendar defaultValue={newDate} />
+									</Box>
+									<Box>
+										<FormLabel fontSize={"xl"}>EndDate</FormLabel>
+										<CustomEndDatePickerCalendar defaultValue={newEndDate} />
+									</Box>
+								</HStack>
 								<FormLabel fontSize={"xl"}>Category</FormLabel>
 								<RadioCategory value={category} />
 								<FormLabel fontSize={"xl"}>Description</FormLabel>
