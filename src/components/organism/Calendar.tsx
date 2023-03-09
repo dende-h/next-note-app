@@ -102,12 +102,10 @@ export const Calendar: VFC = memo(() => {
 					initialView="dayGridMonth"
 					events={eventExample}
 					weekends={true} //falseにすると土日が含まれなくなるdefault値がtrueなので省略可
-					titleFormat={{
-						year: "numeric",
-						month: "short"
-					}}
 					headerToolbar={{
-						start: "title"
+						start: "title Calendar",
+						center: "",
+						end: "today 前月,次月"
 					}}
 					contentHeight={"700px"}
 					// eventContent={(arg: EventContentArg) => EventComponent(arg)}
