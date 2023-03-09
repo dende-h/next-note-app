@@ -19,17 +19,21 @@ export const Calendar: VFC = memo(() => {
 	const schedule: FetchMemoList[] = useRecoilValue(categoryIsScheduleSelector);
 	const todo: FetchMemoList[] = useRecoilValue(categoryIsTodoSelector);
 	const completed = 2;
+
+	//tooltipを追加するためにコンポーネントを生成している
 	const EventComponent = (title: string, description: string) => (
 		<Tooltip label={description} aria-label="tooltip" placement="top" hasArrow arrowSize={5}>
 			<div>{title}</div>
 		</Tooltip>
 	);
 
+	//TODOもカレンダーに表示するために、concat関数でイベント用の配列を作成
 	useEffect(() => {
 		const events = schedule
 			.map((item) => {
 				const eventDate = format(new Date(item.date), "yyyy-MM-dd");
 				const beforeEndDate = new Date(item.endDate);
+				//そのままの日付だとカレンダーに反映が前日までになるので、１日足してる
 				const endDate =
 					item.endDate !== eventDate
 						? format(beforeEndDate.setDate(beforeEndDate.getDate() + 1), "yyyy-MM-dd")
@@ -40,7 +44,11 @@ export const Calendar: VFC = memo(() => {
 			.concat(
 				todo.map((item) => {
 					const eventDate = format(new Date(item.date), "yyyy-MM-dd");
-					const endDate = format(new Date(item.endDate), "yyyy-MM-dd");
+					const beforeEndDate = new Date(item.endDate);
+					const endDate =
+						item.endDate !== eventDate
+							? format(beforeEndDate.setDate(beforeEndDate.getDate() + 1), "yyyy-MM-dd")
+							: eventDate;
 					const todoColor = item.mark_div === completed ? "gray" : "pink";
 					const event = {
 						title: item.title,
