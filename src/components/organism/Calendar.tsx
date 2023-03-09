@@ -96,8 +96,8 @@ export const Calendar: VFC = memo(() => {
 		<>
 			<Box backgroundColor={"gray.50"} w="100%" minHeight="850px" padding={6} borderRadius={10} shadow={"xl"} m={4}>
 				<FullCalendar
-					// locales={[jaLocale]}
-					// locale="ja"
+					locales={[jaLocale]}
+					locale="ja"
 					plugins={[dayGridPlugin /*interactionPlugin*/]}
 					initialView="dayGridMonth"
 					events={eventExample}
