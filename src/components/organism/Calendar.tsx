@@ -19,8 +19,8 @@ export const Calendar: VFC = memo(() => {
 	const schedule: FetchMemoList[] = useRecoilValue(categoryIsScheduleSelector);
 	const todo: FetchMemoList[] = useRecoilValue(categoryIsTodoSelector);
 	const completed = 2;
-	const EventComponent = (title: string) => (
-		<Tooltip label="Hey, I'm here!" aria-label="A tooltip">
+	const EventComponent = (title: string, description: string) => (
+		<Tooltip label={description} aria-label="tooltip" placement="top" hasArrow arrowSize={5}>
 			<div>{title}</div>
 		</Tooltip>
 	);
@@ -29,7 +29,11 @@ export const Calendar: VFC = memo(() => {
 		const events = schedule
 			.map((item) => {
 				const eventDate = format(new Date(item.date), "yyyy-MM-dd");
-				const endDate = item.endDate !== eventDate ? format(new Date(item.endDate), "yyyy-MM-dd") : eventDate;
+				const beforeEndDate = new Date(item.endDate);
+				const endDate =
+					item.endDate !== eventDate
+						? format(beforeEndDate.setDate(beforeEndDate.getDate() + 1), "yyyy-MM-dd")
+						: eventDate;
 				const event = { title: item.title, start: eventDate, end: endDate };
 				return event;
 			})
@@ -70,7 +74,7 @@ export const Calendar: VFC = memo(() => {
 					}}
 					events={addEvent}
 					contentHeight={"700px"}
-					eventContent={(arg: EventContentArg) => EventComponent(arg.event.title)}
+					eventContent={(arg: EventContentArg) => EventComponent(arg.event.title, arg.event.extendedProps.description)}
 				/>
 			</Box>
 		</>

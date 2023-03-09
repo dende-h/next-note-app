@@ -133,16 +133,7 @@ export const ModalEditor: VFC<Props> = memo((props: Props) => {
 										</Box>
 									</HStack>
 								)}
-								<HStack>
-									<Box>
-										<FormLabel fontSize={"xl"}>StartDate</FormLabel>
-										<CustomDatePickerCalendar defaultValue={newDate} />
-									</Box>
-									<Box>
-										<FormLabel fontSize={"xl"}>EndDate</FormLabel>
-										<CustomEndDatePickerCalendar defaultValue={newEndDate} />
-									</Box>
-								</HStack>
+
 								<FormLabel fontSize={"xl"}>Category</FormLabel>
 								<RadioCategory value={category} />
 								<FormLabel fontSize={"xl"}>Description</FormLabel>
