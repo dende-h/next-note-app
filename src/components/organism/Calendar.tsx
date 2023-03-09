@@ -22,7 +22,13 @@ export const Calendar: VFC = memo(() => {
 
 	//tooltipを追加するためにコンポーネントを生成している
 	const EventComponent = (arg: EventContentArg) => (
-		<Tooltip label={arg.event.extendedProps.description} aria-label="tooltip" placement="top" hasArrow arrowSize={5}>
+		<Tooltip
+			label={arg.event.extendedProps.description}
+			aria-label="tooltip"
+			placement="top-start"
+			hasArrow
+			arrowSize={5}
+		>
 			<div>{arg.event.title}</div>
 		</Tooltip>
 	);
