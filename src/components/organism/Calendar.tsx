@@ -5,8 +5,6 @@ import FullCalendar, { EventContentArg } from "@fullcalendar/react";
 // FullCalendarで月表示を可能にするモジュール。
 import dayGridPlugin from "@fullcalendar/daygrid";
 
-// FullCalendarで日付や時間が選択できるようになるモジュール。
-import interactionPlugin from "@fullcalendar/interaction";
 //日本語対応のためのインポート
 import jaLocale from "@fullcalendar/core/locales/ja";
 
@@ -74,21 +72,21 @@ export const Calendar: VFC = memo(() => {
 		setAddEvent(events);
 	}, [schedule, todo]);
 
-	const eventExample = [
-		{
-			title: "イベント1",
-			start: new Date(),
-			end: new Date().setDate(new Date().getDate() + 5),
-			description: "温泉旅行",
-			backgroundColor: "green",
-			borderColor: "green"
-		},
-		{
-			title: "期末テスト",
-			start: new Date().setDate(new Date().getDate() + 5),
-			description: "2年最後の期末テスト"
-		}
-	];
+	// const eventExample = [
+	// 	{
+	// 		title: "イベント1",
+	// 		start: new Date(),
+	// 		end: new Date().setDate(new Date().getDate() + 5),
+	// 		description: "温泉旅行",
+	// 		backgroundColor: "green",
+	// 		borderColor: "green"
+	// 	},
+	// 	{
+	// 		title: "期末テスト",
+	// 		start: new Date().setDate(new Date().getDate() + 5),
+	// 		description: "2年最後の期末テスト"
+	// 	}
+	// ];
 
 	return (
 		<>
@@ -96,9 +94,9 @@ export const Calendar: VFC = memo(() => {
 				<FullCalendar
 					locales={[jaLocale]}
 					locale="ja"
-					plugins={[dayGridPlugin /*interactionPlugin*/]}
+					plugins={[dayGridPlugin]}
 					initialView="dayGridMonth"
-					events={eventExample}
+					events={addEvent}
 					weekends={true} //falseにすると土日が含まれなくなるdefault値がtrueなので省略可
 					headerToolbar={{
 						start: "prevYear,nextYear",
