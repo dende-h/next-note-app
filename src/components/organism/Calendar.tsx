@@ -1,4 +1,4 @@
-import { Box } from "@chakra-ui/react";
+import { Box, Tooltip } from "@chakra-ui/react";
 // FullCalendarコンポーネント。
 import FullCalendar, { EventContentArg } from "@fullcalendar/react";
 
@@ -19,13 +19,17 @@ export const Calendar: VFC = memo(() => {
 	const schedule: FetchMemoList[] = useRecoilValue(categoryIsScheduleSelector);
 	const todo: FetchMemoList[] = useRecoilValue(categoryIsTodoSelector);
 	const completed = 2;
-	const EventComponent = (title: string) => <div>{title}</div>;
+	const EventComponent = (title: string) => (
+		<Tooltip label="Hey, I'm here!" aria-label="A tooltip">
+			<div>{title}</div>
+		</Tooltip>
+	);
 
 	useEffect(() => {
 		const events = schedule
 			.map((item) => {
 				const eventDate = format(new Date(item.date), "yyyy-MM-dd");
-				const event = { title: item.title, date: eventDate };
+				const event = { title: item.title, start: eventDate };
 				return event;
 			})
 			.concat(
@@ -34,8 +38,8 @@ export const Calendar: VFC = memo(() => {
 					const todoColor = item.mark_div === completed ? "gray" : "pink";
 					const event = {
 						title: item.title,
-						start: new Date(),
-						date: eventDate,
+						start: format(new Date(), "yyyy-MM-dd"),
+						end: eventDate,
 						backgroundColor: todoColor
 					};
 					return event;
