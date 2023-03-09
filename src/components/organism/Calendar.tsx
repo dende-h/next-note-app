@@ -86,9 +86,7 @@ export const Calendar: VFC = memo(() => {
 		{
 			title: "期末テスト",
 			start: new Date().setDate(new Date().getDate() + 5),
-			description: "2年最後の期末テスト",
-			backgroundColor: "blue",
-			borderColor: "blue"
+			description: "2年最後の期末テスト"
 		}
 	];
 
