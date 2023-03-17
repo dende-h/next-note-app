@@ -40,11 +40,8 @@ export const Calendar: VFC = memo(() => {
 			.map((item) => {
 				const eventDate = format(new Date(item.date), "yyyy-MM-dd");
 				const beforeEndDate = new Date(item.endDate);
-				//そのままの日付だとカレンダーに反映が前日までになるので、１日足してる
 				const endDate =
-					item.endDate !== eventDate
-						? format(beforeEndDate.setDate(beforeEndDate.getDate() + 1), "yyyy-MM-dd")
-						: eventDate;
+					item.endDate !== eventDate ? format(beforeEndDate.setDate(beforeEndDate.getDate()), "yyyy-MM-dd") : eventDate;
 				const event = { title: item.title, start: eventDate, end: endDate, description: item.description };
 				return event;
 			})
